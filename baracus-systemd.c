@@ -1,8 +1,9 @@
 #include <stdio.h>
+
 #include "baracus-systemd.h"
 
 
-int main(int argc, char * argv) 
+int main(int argc, char ** argv) 
 {
 	char * source;
 	char * target;

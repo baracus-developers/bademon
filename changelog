@@ -1,0 +1,980 @@
+2011-02-24:	HEAD
+	- fix media check to work with isohybrid images (bnc #674609)
+
+2011-02-17:	3.5.9
+	- don't mess with mtab (bnc #668149)
+
+2011-01-19:	3.5.8
+	- more user option fixes
+	- brokenmodules accepts '+' and '-' now
+	- add status info also to log
+	- fix user option parsing
+	- allow for user defined options
+	- those options are ignored by linuxrc but added unchanged to /etc/install.inf
+
+2010-12-06:	3.5.7
+	- don't check keyboard status too often to speed up media check
+
+2010-12-03:	3.5.6
+	- fix media check abort message (bnc #657065)
+
+2010-10-28:	3.5.5
+	- increase TTL for SLP (bnc #649854)
+
+2010-10-20:	3.5.4
+	- really accept static ipv6 addresses (bnc #633519)
+
+2010-09-28:	3.5.3
+	- remove 'no DUD found' message (bnc #601770)
+
+2010-09-10:	3.5.2
+	- fix scanning for driver updates
+
+2010-09-02:	3.5.1
+	- fix bug introduced with 3.5.0
+	- fix perl warning
+
+2010-08-24:	3.5.0
+	- implemented 'disk' scheme to mean 'all local devices' as documented (bnc #596458)
+	- added 'quiet' option to url syntax
+
+2010-08-20:	3.4.15
+	- added all=1 tag to url to keep searching on all devices (bnc #596456)
+	- extra menu can be reached from input line via 'ESC ESC' or 'ESC x'
+
+2010-06-25:	3.4.14
+	- updated translations
+
+2010-04-28:	3.4.13
+	- dud option accepts normal rpms
+	- make backtrace logs optional (bnc #597797)
+	- always set dhcp timeout (bnc #594606)
+
+2010-03-30:	3.4.12
+	- add 'type' option to url syntax (bnc #590811)
+
+2010-02-26:	3.4.11
+	- added 'namescheme' option to linuxrc to select alternative device name
+	  schemes (by-id, by-path, by-label); default is 'by-id' (bnc #582717)
+	- fix make deps for VERSION
+	- fix make deps for changelog
+
+2010-02-24:	3.4.10
+	- fix Makefile
+
+2010-02-24:	3.4.9
+	- add 'devices' param for zypp (bnc #570541)
+	- added git2log
+	- added .gitignore
+	- create VERSION and changelog from git repo
+
+2010-02-22:	3.4.8
+	- added sle11 patches (v3.3.46 - v3.3.53, inclusive):
+	  * translations updated
+	  * keep /lib/firmware from initrd in rescue system (bnc #576072)
+	  * s390: don't use net_config() in auto mode to avoid fallback to
+	    manual (bnc #474457)
+	  * s390: set defaults for CCW write and data channels
+	  * s390: allow installation via console (bnc #476373)
+	  * s390: detect PTP devices in autoinstall case (bnc #555236)
+	  * s390: work around bugged Operating System Messages console
+	    that sends empty lines as " \r" instead of "\r" (forward-ported
+	    from SLES10 SP3, bnc #517763, bnc #484358)
+	  * s390: fix check for existing network config (bnc #562101)
+	  * added util_error_trace() to facilitate debugging
+	  * do backtraces when net_activate4() fails
+	  * s390: re-enable layer 2 for HSI (bnc #559174)
+	- use ctc_configure for LCS devices (bnc #550232)
+	- don't pass uninitialized pointers to strprintf() (bnc #494301)
+
+2009-10-06:	3.4.7
+	- pass keyboard mapping to yast (bnc #534856)
+
+2009-09-24:	3.4.6
+	- ensure 'extend' returns correct error code (bnc #510999)
+
+2009-09-09:	3.4.5
+	- Merge branch 'master' of git@gitorious.org:opensuse/linuxrc
+	- Conflicts:
+		Changelog
+	- no blocking popup for DHCP error message (bnc #534078)
+	- starting new network setup code
+	- s390: activate network interface before loading info file
+
+2009-07-29:	3.4.4
+	- handle zypp iso url scheme (bnc #507474)
+
+2009-06-25:	3.4.3
+	- pass on DHCPTimeout to install.inf (bnc #396824)
+	- removed last trace of real-root-dev (bnc #192405)
+
+2009-06-19:	3.4.2
+	- added udev.rule option to write udev rules (fate #305867)
+
+2009-06-09:	3.4.1
+	- ext4dev -> ext4
+	- added 'netsetup=now' to force immediate network configuration
+
+2009-05-14:	3.4.0
+	- netsetup option was not used when doing network install (bnc #495525)
+	- reintegrate zenworks imaging options
+	- s390: merge OSAHWAddr feature from SLES10 (bnc #479481)
+	- s390: ask for relative port number even when device parameters
+	  have been entered manually (bnc #477918)
+	- s390: falling back to manual mode in network setup has nasty
+	  side
+	  effects and is not really necessary to begin with; do away
+	- with it
+	  (bnc #471452)
+
+2009-02-13:	3.3.32
+	- call gpg with '--ignore-valid-from --ignore-time-conflict' to avoid
+	  failing on systems with broken date/time (bnc #456755)
+
+2009-02-12:	3.3.31
+	- removed obsolete documentation and added a snapshot from the
+	  openSUSE wiki instead (bnc #474848, bnc #473523)
+
+2009-02-11:	3.3.30
+	- s390: delay net IF setup in auto-install mode (bnc #473749)
+
+2009-01-27:	3.3.29
+	- correctly detect dhcp failure (bnc #406475)
+	- do not ask for display type in auto mode (bnc #446458)
+
+2009-01-20:	3.3.27
+	- load edd before starting udev (bnc #465709)
+
+2009-01-19:	3.3.26
+	- enable ZyppRepoURL (bnc #465820)
+
+2009-01-12:	3.3.25
+	- keep VNC & SSH settings (bnc #447433)
+
+2009-01-12:	3.3.24
+	- translations updated
+
+2008-12-10:	3.3.23
+	- s390: clean up properly after failed installation attempt
+	  (bnc #443430)
+
+2008-11-26:	3.3.22
+	- keep parts of initrd for rescue system (bnc #437796)
+
+2008-11-25:	3.3.21
+	- accidentally copied usb disks into ram while searching for driver updates (bnc #448807)
+
+2008-11-21:	3.3.20
+	- added fallback fix again
+
+2008-11-19:	3.3.19
+	- translations updated
+
+2008-11-19:	3.3.18
+	- don't check SHA1 of info files (bnc #446134)
+
+2008-11-14:	3.3.17
+	- s390: don't crash when no port number entered (bnc #444510)
+
+2008-11-13:	3.3.16
+	- driverudates were sometimes not unmounted
+	- inst-sys/rescue can now be extended via 'dud' syntax
+	- s390: don't fall back to manual mode unless portno is actually
+	  needed
+	- s390: added portno parameter for autoinstall (fate #304080)
+
+2008-11-07:	3.3.14
+	- revert ps3 patch (bnc #442227)
+
+2008-10-31:	3.3.13
+	- don't sha1-check files from mountable media
+	- signature & sha1 rework, finished
+	- driverupdate signing, cont.
+	- search list dialog back to old place (bnc #439754)
+	- driverupdates need to be signed now
+	- reworked signature & sha1 checks
+	- disable PS3 vram swap for now as it causes trouble with FW 2.50
+	- revert unwanted checkin
+	- remove bogus domain name check; enter search list after NS setup
+
+2008-10-15:	3.3.11
+	- fix signature check (bnc #435170)
+	- initrd can have parts left in fs images (bnc #430140)
+
+2008-10-13:	3.3.10
+	- get hostname via dhcp (bnc #432560)
+	- keymap: rename de-lat1-nd -> de-latin1-nodeadkeys
+	- change keymap handling to work with original kbd package layout
+	- fix bug in lndir code
+
+2008-10-07:	3.3.9
+	- fix segfault in fs type detection (bnc #429224)
+	- cd-rom -> dvd (bnc #221760)
+
+2008-10-01:	3.3.8
+	- tftp is back
+	- add domain name dialog (bnc #423666)
+	- fix segfault in umount (bnc #429234)
+	- don't completely trust user specified device name (bnc #429518)
+	- allow to correct an invalid ip (bnc #428287)
+	- removed net_ask_hostname() (bnc #423136)
+
+2008-09-23:	3.3.7
+	- added 'supporturl' option (fate #305180)
+
+2008-09-22:	3.3.6
+	- s390: added second port support for OSA 3/ATM (fate #304080)
+
+2008-09-19:	3.3.5
+	- bump version
+	      - s390: fixed flaky net device name detection (bnc #427475)
+	      - s390: don't ask for network parameters twice
+
+2008-09-17:	3.3.4
+	- make 'extend' a bit faster
+	- s390: don't loop over net config, return error instead (prevents
+	- inconsistency in workflow on error)
+
+2008-09-15:	3.3.3
+	- write zypp url
+	- s390: pass layer2, portname to qeth_configure
+	- s390: remove old network setup code
+
+2008-09-01:	3.3.2
+	- added 'udev' & 'udev.mods' debug flags
+	- load 'efivars' module
+	- added 'efi' option
+
+2008-08-18:	3.3.1
+	- 'boot installed system' no longer crashes
+
+2008-08-18:	3.3.0
+	- new version
+	- s390: use network config scripts instead of our own code
+	- re-organize menu structure
+	- offer new option "start shell" under "expert" (fate #303627)
+	- s390: we can do a reboot() on s390 now (fate #304940)
+	- s390: fixed net_s390_get_ifname() for new sysfs layout
+	- s390: handle module loading errors
+	- s390: ctc module is now called ctcm
+
+2008-07-25:	3.2.3
+	- show motd
+	- add init/done scripts to extensions
+
+2008-07-24:	3.2.2
+	- pass sax2 parameter
+	- add some options
+	 - 'extend' can now add and remove inst-sys parts
+
+2008-07-21:	3.2.1
+	- reall ppc64
+
+2008-07-08:	3.2.0
+	- ipv6
+	- more ipv6
+	- ipv6
+	- ipv6
+	- ipv6
+
+2008-06-10:	3.1.34
+	- don't check filenames when verifying SHA1 sum
+	- d'oh!
+	- fixed typos
+
+2008-06-03:	3.1.33
+	- fixed evil bug in netcard sorting code (bnc #396749)
+
+2008-05-29:	3.1.32
+	- find proper place for media check (bnc #395157)
+
+2008-05-27:	3.1.31
+	- try connected network cards first (bnc #394618)
+	- use dhcpcd --noipv4ll to avoid local link addresses (bnc #394618)
+	- fix driverupdate loading (bnc #393082)
+	- load usb modules before starting braille detection
+	- try connected network cards first (bnc #394618)
+	- use dhcpcd --noipv4ll to avoid local link addresses (bnc #394618)
+
+2008-05-26:	3.1.30
+	- updated translations
+	- fix driverupdate loading, step 1
+	- switch from hwcfg to udev
+
+2008-05-19:	3.1.29
+	- load mv643xx_eth (bnc #359867)
+	- on zSeries, no ESC key is available to cancel input.
+	  Use "+++" instead (bnc #388424)
+
+2008-05-13:	3.1.28
+	- use real swapon
+
+2008-05-09:	3.1.27
+	- use udevsettle
+
+2008-05-09:	3.1.26
+	- added size parameter to util_read_and_chop()
+	- drop adfs detection
+	- load ps3_gelic
+	- removed net_list_s390_devs()
+
+2008-05-09:	3.1.25
+	- removed braille detection workaround
+	- translations updated
+
+2008-05-08:	3.1.24
+	- olh: swap to videoram on PS3
+
+2008-05-08:	3.1.23
+	- added 'nfsops' option to pass nfs mount options
+
+2008-05-07:	3.1.22
+	- added option 'braille=1' to start braille support in linuxrc
+	- fix media check (bnc #385885)
+	- left align list of SLP installation sources
+
+2008-04-30:	3.1.21
+	- dhcpcd even changed /var/lib/dhcpcd/dhcpcd-*.info format
+
+2008-04-24:	3.1.20
+	- adapt to new dhcpcd
+	- try wired network cards first (bnc #381283)
+
+2008-04-23:	3.1.19
+	- downloaded 'info' file is now /download/info (bnc #333835)
+	- driver updates can be specified with dud=<url> (fate #302851, bnc #363650)
+
+2008-04-21:	3.1.18
+	- finish porting autoload network modules patch
+	- autoload network modules in manual mode (bnc #378731)
+	- check for existing ip only if 'arping' is available
+
+2008-04-16:	3.1.17
+	- turn kexec_reboot on per default (bnc #380146)
+
+2008-04-09:	3.1.16
+	- allow 'root: kexec' in /etc/yast.inf
+
+2008-04-07:	3.1.15
+	- added kexec_reboot option (for yast)
+
+2008-04-04:	3.1.14
+	- instsys extensions: track loaded parts better
+
+2008-04-03:	3.1.13
+	- smt is now reg (or smt)
+	- implemented 'extend' command for downloading & integrating instsys parts
+
+2008-03-28:	3.1.12
+	- fix loading of modules without config
+	- can unpack only parts of cpio/rpm archives
+	  (add '?list=pattern1,pattern2,...' to url)
+
+2008-03-26:	3.1.11
+	- it really works
+	- support rpms as image files
+	- added option 'squash=1': convert downloaded files to squashfs images
+
+2008-03-14:	3.1.10
+	- fix segfault introduced recently (bnc #370849)
+	- better kexec support (with splash)
+	- reworked module option code to work properly
+
+2008-03-12:	3.1.9
+	- Tejun: allow module options to be passed simply as 'module.option'
+	- yep is now smt
+
+2008-02-27:	3.1.8
+	- support Y2GDB option (fate #302346
+	- unmount all discs in case YaST could not do it itself (fate #302647)
+
+2008-02-20:	3.1.6
+	- ensure (language_t).trans_id has always a non-NULL value (bnc #360867)
+
+2008-02-04:	3.1.5
+	- mediacheck: only if we install from cd
+	- setup display properly
+
+2008-02-04:	3.1.4
+	- when parameter "mediacheck" is set to 1, perform check
+	  of the installation media (fate #302993). When problems
+	  are found, fall into manual mode.
+	- allow media check to be interrupted by pressing the ESC key
+	- when doing a network install, check if the IP address of the
+	  machine to be installed is already in use by another machine
+	  (fate #302027).
+	  This check can be suppressed with parameter "forceip=1" either
+	  on the command line or in the configuration file
+	- pass 'yepurl'&  'yepcert' options to yast (fate #303335)
+
+2008-01-30:	3.1.1
+	- linuxrc.debug accepts 'wait'
+	- image split, cont.
+	- fixed evil bug in url_print()
+	- better symlink handling in make_links()
+	- image split, cont.
+	- add 'nomdns' option to turn off MDNS usage (bnc #349467)
+	- split image, cont.
+	- split images, cont.
+	- image split, cont.
+	- remove references to $INSTSYS
+	- fix bug in lndir
+	- multi instsys parts, cont.
+	- multi instsys parts, cont.
+	- support multiple instsys parts (started)
+
+2008-01-08:	3.1.0
+	- new install.inf entries: RepoURL & InstsysURL
+
+2007-11-07:	3.0.22
+	- apply 'netwait' to dhcp, too (bnc #335648)
+
+2007-11-07:	3.0.21
+	- fix parsing of 'rescue' parameter
+	- reactivate media change code
+	- redirect kernel messages to tty4 earlier, so we don't watch udev
+	  at work
+
+2007-09-24:	3.0.20
+	- fix 32-bit filesize issue (bnc #310893)
+
+2007-09-19:	3.0.19
+	- make slp window wider
+	- correct sha1 endianness (bnc #326258)
+
+2007-09-17:	3.0.18
+	- don't turn off swap (bnc #308121)
+	- device was sometimes not written to install.inf (bnc #305495)
+
+2007-09-11:	3.0.17
+	- updated translations
+
+2007-09-10:	3.0.16
+	- always write 'cdrom' entry to install.inf (bnc #305495)
+
+2007-09-07:	3.0.15
+	- 'netdevice' option is back (bnc #304268)
+	- added 'device' option (replaces 'partition' and 'cdromdev')
+
+2007-09-03:	3.0.14
+	- enable modprobe all the time (bnc #303728)
+	- write blacklist for modprobe
+
+2007-08-31:	3.0.13
+	- get nisdomain via dhcp (bnc #303844)
+	- store wlan config in install.inf (bnc #223570)
+
+2007-08-30:	3.0.12
+	- finished driver update loading (bnc #304827)
+	- fix rescue system loading
+
+2007-08-27:	3.0.10
+	- better handle situations with more than one module to load (bnc #304134)
+
+2007-08-20:	3.0.9
+	- new texts
+	- LFS
+
+2007-08-17:	3.0.8
+	- wget fix
+	- fixed exec scheme
+	- fixed 'file' scheme
+	- fixed usb module loading
+
+2007-08-16:	3.0.7
+	- really write proxy port (bnc #300177)
+	- manual mode: allow to enter server port (bnc #299224)
+	- nfsport option gone
+
+2007-08-14:	3.0.6
+	- removed nfs_tcp option
+	- cleaned up NFS code
+	- instsys was not found if it's a directory & a relative url was used
+	- network setup was wrong
+	- nfs mount
+
+2007-08-09:	3.0.5
+	- new po files
+	- updated po
+
+2007-08-09:	3.0.4
+	- don't check sha1 of 'content'
+	- some more log messages
+	- module for iso9660 is isofs (bnc #298345)
+	- download mmedia.1/license.tar.gz (bnc #298342)
+	- removed xxx option
+	- added kexec=1 option (fate #301806)
+
+2007-08-08:	3.0.3
+	- map ppc64 -> ppc (bnc #298348)
+
+2007-08-08:	3.0.2
+	- new key for sha1 checksums
+
+2007-08-06:	3.0.1
+	- made ntfs-3g default
+	- check sha1sum of all downloaded files (fate #302195)
+	- new sha1 files
+	- new md5sum files
+
+2007-08-03:	3.0.0
+	- mount takes care of module loading
+	- instsys2, cont.
+	- instsys2 back
+	- fstype is back
+	- squashfs
+	- removed stuff
+	- might work again
+	- nfs ok
+	- dto.
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- proxy works again
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- cont.: dud
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- new version
+	- cont.: slp
+	- cont.
+	- cont.
+	- cont.: ftp, http
+	- cont.: smb
+	- cont.: nfs
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- free() bug
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- cont.
+	- new file handling rewrite, part 1
+	- curl, cont
+	- resolv.conf not written when netsetup=dhcp,all was used (bnc #284469)
+	- allow multiple nameservers (bnc #284469)
+	- don't kill fuse mount process
+	- modify url parser a bit
+	- don't automatically uncompress while downloading
+
+2007-06-12:	2.1.27
+	- ntfs_3g support
+	- curl, cont.
+	- removed livecd code
+	- use new url parser
+	- curl, cont.
+	- move to libcurl, cont.
+	- use libcurl, part 1
+
+2007-05-25:	2.1.26
+	- cleanup: removed MemYaSTText & MemModules options
+	- 'addswap' works again
+	- added warning before we format a paritition
+
+2007-05-24:	2.1.25
+	- new swap file handling, cont.
+	- rewrote swap space dialog: it can create swap partitions and files now
+	- withiscsi=1 now implies netsetup=1 (bnc #271420)
+
+2007-03-26:	2.1.24
+	- new vfat fs detection (bnc #257117)
+	- added ext4dev support
+	- s390: ask for installation display when netsetup=1 (bnc #253695)
+
+2007-03-16:	2.1.23
+	- added netsetup=dhcp,all option to try all network interfaces
+	  for dhcp (bnc #249046)
+	- work around problem with too early DHCP releases (bnc #221865)
+	- don't ask for keymap when starting rescue system
+	  on serial console (bnc #255344)
+	- mls: bad tftp response overwrites the request (bnc #242892)
+	- accept 'BOOTIF' as alias to 'netdevice'
+
+2007-02-09:	2.1.22
+	- Korean no longer requires extra font
+
+2007-02-05:	2.1.21
+	- added 'netretry' option to aid debugging network problems (bnc #236646)
+
+2007-02-05:	2.1.20
+	- read iSCSI BIOS tables (bnc #221206)
+
+2007-01-26:	2.1.19
+	- add network card name to install.inf (bnc #223498)
+
+2007-01-19:	2.1.18
+	- aborting some dialogs changed config values (bnc #229878)
+	- more ip address checks (bnc #229297)
+	- s390: fix device list, then disable it (should not be
+	  necessary
+	  any more)
+	- s390: limit number of network interfaces displayed
+	- clean up cut-and-paste programming
+	- make s390 net config work again
+
+2006-11-21:	2.1.17
+	- run 'iwconfig <interface> key off' for open wlan connections (bnc #222491)
+
+2006-11-20:	2.1.16
+	- write module blacklist to install.inf (bnc #221815)
+	- translations updated
+
+2006-11-16:	2.1.15
+	- something with slp (bnc #185483)
+	- fixed disk size info (bnc #221153)
+	- umount before starting rescue system (bnc #220316)
+
+2006-11-13:	2.1.14
+	- new translations
+
+2006-11-10:	2.1.13
+	- info file via network
+
+2006-11-07:	2.1.12
+	- new translations
+
+2006-11-06:	2.1.11
+	- more large file fixes
+	- info file via network, first step
+
+2006-10-24:	2.1.10
+	- use stat64 when checking for files (bnc #184448)
+	- info file can be on any local media (bnc #56845)
+	- there's no longer a default info file
+	- removed remaining special floppy-code (used to be for
+	  rescue floppy & old info file code)
+
+2006-10-20:	2.1.9
+	- get rid of network config questions after failed network
+	  install (bnc #171102)
+	- add wlan setup during auto install
+
+2006-10-19:	2.1.8
+	- extend $PATH for busybox
+	- better active driver detection
+
+2006-10-18:	2.1.7
+	- rewrote hardware activation: per default all storage & network
+	  modules are loaded now
+	- removed (hopefully) obsolete pcmcia code
+	- removed strange passwd/shadow handling code
+	- more cleanup: has_kbd_ig removed
+	- removed module disk support
+	- removed some more ancient code
+	- better wlan support
+	- removed ancient ide-scsi/hwcheck code
+
+2006-10-16:	2.1.6
+	- fixed wpa config
+	- check password length
+	- mark loaded/loadable modules differently in module selection dialog
+	- fixed drawing bug in too small windows
+	- better network device selection
+	- basic wlan support
+	- mark loaded/loadable modules differently in module selection dialog
+
+2006-10-02:	2.1.5
+	- cdrom install works again
+	- allow network config in 'exec' scheme
+
+2006-09-25:	2.1.4
+	- added 'exec' url scheme that just runs a program
+
+2006-09-18:	2.1.3
+	- link against full libhd (for wlan stuff)
+
+2006-08-30:	2.1.2
+	- remove dependency on libsysfs
+
+2006-08-30:	2.1.1
+	- remove libsysfs but for s390
+	- changed tftp to bind to different port for each connection (bnc #187745)
+	       - tell the user what file we failed to FTP
+	       - s390: accept upper-case CCW addresses
+	- set min vnc password length to 8 (bnc #184204)
+	- s390: make CTC mode dialog wider (bnc #186563)
+
+2006-06-09:	2.1.0
+	- fixed device name matching for hard disk install (bnc #177055)
+	- leave room for end-of-string
+	- read /proc/cmdline with fread() instead of fgets() (i.e. do
+	  not
+	  stop at LF, bnc #176095)
+	- strip - and _ from both given parameters and parameter keywords
+	- s390: don't show layer2 dialog if network IF is hsi (not supported)
+	- s390: add layer2 parameter to set layer2 option (bnc #168492)
+
+2006-05-18:	2.0.42
+	- increase klog buffer so we don't miss important kernel messages (bnc #172971)
+	- bump version
+	- s390: add layer2 option for qdio/eth interfaces
+
+2006-05-11:	2.0.41
+	- allow block devs without partition table as harddisk install
+	  source (bnc #158529)
+
+2006-05-11:	2.0.40
+	- fix zfcp_host_configure call
+
+2006-05-08:	2.0.39
+	- don't use broadcast flag for dhcp; make dhcpcd options
+	  configurable (bnc #166222)
+
+2006-05-08:	2.0.38
+	- keep udevd running
+	- evaluate 'insmod' option earlier, so modules are loaded before
+	  hardware detection starts (bnc #164213)
+
+2006-04-27:	2.0.37
+	- wait for usb-stor-scan to finish (bnc #168983)
+
+2006-04-25:	2.0.36
+	- s390: fixed zfcp_disk_configure parameters (bnc #162954)
+	- make fopen() and fclose() depend on the same condition
+
+2006-04-21:	2.0.35
+	- don't do any %G stuff if not utf8 (bnc #165564)
+	- don't do any %G stuff if not utf8
+
+2006-04-12:	2.0.34
+	- fixed cramfs handling on big-endian machines (bnc #164659)
+
+2006-04-10:	2.0.33
+	- s390: use mod_modprobe() instead of mod_insmod() to load zfcp
+	  module (bnc #162954)
+
+2006-04-07:	2.0.32
+	- updated texts
+
+2006-04-05:	2.0.31
+	- fixed driverupdate loading
+
+2006-03-24:	2.0.30
+	- introduce media.1/installfiles (to handle SPs)
+
+2006-03-23:	2.0.29
+	- allow ISO images as install source (bnc #159565)
+	- downloaded files were not unlinked after use
+	- reworked NFS code to allow ISO images (bnc #159565)
+
+2006-03-21:	2.0.28
+	- 'driverupdate' files were not always allowed (bnc #153667)
+	- accept cpio archive when loading images
+	- removed some ancient loop-mount code
+
+2006-03-20:	2.0.27
+	- fix 'loading' message in linemode
+	- fix rescue loading message
+
+2006-03-20:	2.0.26
+	- accept console=uart,... option (bnc #152221)
+	- don't kill shell on console 9
+	- 'listen' mode improved
+	- accept console=uart,... option (bnc #152221)
+
+2006-03-14:	2.0.25
+	- kill zombies (bnc #150208)
+
+2006-03-10:	2.0.24
+	- 'request for CD1' message texts are read from CD (bnc #64750)
+
+2006-03-07:	2.0.23
+	- now possible to enter +++ as an escape sequence instead of
+	  pressing ^[ in dia_input*() (bnc #144245)
+
+2006-03-06:	2.0.22
+	- translations updated
+
+2006-02-28:	2.0.21
+	- s390: bring up FCP adapter when booted from SCSI (bnc #153336)
+
+2006-02-20:	2.0.20
+	- Belgian keymap added (bnc #117185)
+	- get rescue /dev dir right
+	- belgian keyboard
+
+2006-02-16:	2.0.19
+	- fix free()-bug (bnc #150012)
+	- s390: avoid buffer overruns on systems with many devices (bnc #148043)
+
+2006-02-14:	2.0.18
+	- another attempt to get rescue system right (bnc #149949)
+	- read Pointopoint (config.net.ptphost) from config file and command line
+
+2006-02-07:	2.0.17
+	- start getty on /dev/console in rescue system
+
+2006-02-06:	2.0.16
+	- add linemode, part 1
+	- s390: made sure net IF setup code is also called in
+	  autoinstall mode (bnc #146290)
+	- s390: fixed two buglets while testing the above
+	- s390: do not ask for hostname
+	- SLP accepts key to limit selection
+	- removed modules disk references, adjusted texts (bnc #146540)
+	- don't run splash if kernel splash is not active (bnc #145598)
+	- startshell, again (bnc #144886)
+
+2006-01-30:	2.0.14
+	- implemented ethtool option (bnc #145041)
+	- added dia_input2_chopspace() (removes leading and trailing
+	  whitespace)
+	- use dia_input2_chopspace() for s390 device parameters
+	  (bnc #144255)
+
+2006-01-26:	2.0.13
+	- handle startshell in linuxrc (bnc #145619)
+	- updated Changelog
+	- separate deprecated s390 devices visually (bnc #144243)
+
+2006-01-24:	2.0.12
+	- linemode fix
+
+2006-01-23:	2.0.11
+	- search for driver updates in initrd (fate #152)
+	- no probing progress indicator for s390*
+	- no utf8, no language & keyboard dialogs in linemode
+	- s390: qeth_mod is now qeth
+	- make net IF error handling a bit more verbose
+
+2006-01-20:	2.0.10
+	- hare: s390 hotplug fix
+
+2006-01-16:	2.0.9
+	- Dutch texts updated
+	- make sure /sbin/hotplug gets events
+	- remove "devz"
+	- pass iscsi option to yast (fate #85)
+
+2006-01-11:	2.0.8
+	- fix dns-resolve bug (bnc #139546)
+
+2006-01-11:	2.0.7
+	- fixed linemode menu handling
+
+2005-12-19:	2.0.6
+	- allow udevd to manage /dev tree
+	- removed internal modprobe
+	- support sub-headings in lists and dialogs
+
+2005-12-09:	2.0.5
+	- renamed Changelog
+	- support rescue system as cramfs
+
+2005-12-09:	2.0.4
+	- cleanup
+	- more cleanup
+	- cleanup
+	- remove compiled-in dhcpcd
+	- write resolv.conf even if dhcp is used
+
+2005-12-07:	2.0.3
+	- portmap gone
+	- autoloading modules now resolves dependencies
+	- portmap gone
+
+2005-12-02:	2.0.2
+	- -Taiwan
+	- use bash, not linuxrc shell
+	- removed complied-in kbd tools
+
+2005-11-29:	2.0.1
+	- remove /usr/lib/YaST2/bin from PATH (bnc #131766)
+	- copy license.zip (fate #110081)
+
+2005-10-28:	2.0.0
+	- can ensure driver updates are applied
+	- new stuff
+	- fix floppy detection in module loading dialog (bnc #55566, #64391)
+	- ensure there's no servicepack.tar.gz in network installs (bnc #117099)
+	- add new s390 net parameters
+
+2005-09-13:	1.9.16
+	- load all pcmcia drivers (bnc #104517)
+
+2005-09-12:	1.9.15
+	- don't activate wide-char languages on normal linux console (bnc #116289)
+
+2005-09-05:	1.9.14
+	- fix segfault when doing hd install & network setup (bnc #114938)
+	- don't try network install if cd install fails (bnc #84171)
+
+2005-09-01:	1.9.13
+	- free initramfs data
+
+2005-08-29:	1.9.12
+	- run pcmcia startup
+	- add config option for NFS via TCP (bnc #76717)
+	- new translations
+
+2005-08-24:	1.9.11
+	- better vfat detection
+	- tag auto-detected modules in module loading dialog
+	- set keymap in auto mode (bnc #105690)
+
+2005-08-22:	1.9.10
+	- use Dansk keymap
+	- translations updated
+	- fix pcmcia support (bnc #103740)
+	- old pcmcia stuff
+	- rip out pcmcia stuff
+
+2005-08-22:	1.9.9
+	- ignore padding when checking media
+
+2005-08-15:	1.9.8
+	- updated translations
+
+2005-08-11:	1.9.7
+	- full bootsplash support (bnc #104009)
+	- 'start installed system': rootfs accidentally unmounted (bnc #102697)
+	- start system fixed
+
+2005-08-05:	1.9.6
+	- don't use root path dhcp reply for anything (bnc #98937)
+
+2005-07-29:	1.9.5
+	- add check to ensure inst-sys matches initrd
+	- updated texts
+	- add check to ensure inst-sys matches initrd
+
+2005-07-25:	1.9.4
+	- ramdisk-free ioctl() only on real block dev
+	- show kbd layout dialog for rescue system only when needed
+
+2005-07-13:	1.9.3
+	- temporary workaround for mount problem
+
+2005-07-07:	1.9.2
+	- better 'loading' progress display
+
+2005-05-27:	1.9.1
+	- export INSTSYS to all shells (bnc #85617)
+
+2005-05-23:	1.9.0
+	- keep initrd modules for rescue system
+	- don't use ramdisks
+	- restructured s390 net IF config
+	- added armv4l support
+
+2005-04-06:	1.8.9
+	       - s390: SCRIPTUP_* entries in hwcfg-* files must be lower-case
+	 after the underscore
+
+2005-04-05:	1.8.8
+	- only IUCV hwcfg files must be named hwcfg-static-
+
