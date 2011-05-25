@@ -133,7 +133,7 @@ static struct {
 
 static dia_item_t di_lxrc_main_menu_last;
 
-int main(int argc, char **argv, char **env)
+int linuxrc_main(int argc, char **argv, char **env)
 {
   char *prog;
   int err, i, j;

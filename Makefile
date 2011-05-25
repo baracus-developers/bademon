@@ -1,6 +1,6 @@
 CC	= gcc
 CFLAGS	= -c -g -O2 -Wall -Wno-pointer-sign
-LDFLAGS	= -rdynamic -lhd -lblkid -lcurl
+LDFLAGS	= -rdynamic -lhd -lblkid -lcurl -lpq
 
 GIT2LOG = $(shell [ -x ./git2log ] && echo ./git2log )
 
@@ -38,11 +38,11 @@ linuxrc: $(OBJ)
 	@mv $(@)-debug $@
 
 baracus-systemd: $(OBJ)
-        $(CC) $(OBJ) $(LDFLAGS) -o $@
-        @cp $@ $(@)-debug
-        @strip -R .note -R .comment $@
-        @ls -l baracus-systemd
-        @mv $(@)-debug $@
+	$(CC) $(OBJ) $(LDFLAGS) -o $@
+	@cp $@ $(@)-debug
+	@strip -R .note -R .comment $@
+	@ls -l baracus-systemd
+	@mv $(@)-debug $@
 
 install: linuxrc baracus-systemd
 	install -m 755 linuxrc $(DESTDIR)/usr/sbin
