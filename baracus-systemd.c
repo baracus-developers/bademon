@@ -46,9 +46,6 @@ int main(int argc, char ** argv, char **env)
 {
 //	rc = linuxrc_main(argc, argv, env);
 	int rc;
-	int             rec_count;
-	int             row;
-	int             col;
 
 	static char *dbname = "baracus";
 	static char *username = "dancer";
@@ -63,8 +60,8 @@ int main(int argc, char ** argv, char **env)
 	appname = argv[0];
 	syslog_info("Appd %s running as %s\n", baracus_appname, appname);
 	
-	baracus_db_connect(hostaddr, dbname, username, password, port, timeout);
-	baracus_query();
+	conn = baracus_db_connect(hostaddr, dbname, username, password, port, timeout);
+	baracus_query(conn, "SELECT * FROM pg_roles");
 	
 	return 0;
 }

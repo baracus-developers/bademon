@@ -13,36 +13,32 @@
 
 const int conninfo_strlen=255;
 
-PGconn	 *conn;
-int baracus_db_connect(char *hostaddr, char *dbname, char *username, char *password, int port, int timeout) 
+PGconn * baracus_db_connect(char *hostaddr, char *dbname, char *username, char *password, int port, int timeout) 
 {
 	
+	PGconn	 *conn;
 	PGresult *res;
 	const char conninfo[conninfo_strlen];
 	
 	snprintf (conninfo, conninfo_strlen, "hostaddr = '%s' port = '%d' dbname = '%s' user = '%s' password = '%s' connect_timeout = '%d0'", hostaddr, port, dbname, username, password, timeout);
-	printf("Conninfo is %s\n", conninfo);
-//	const char *conninfo = "hostaddr = '127.0.0.1' port = '5162' dbname = 'baracus' user = 'dancer' password = 'baractopus' connect_timeout = '10'";
+	printf("conninfo is %s\n", conninfo);
 	conn = PQconnectdb(conninfo);
  
         if (PQstatus(conn) == CONNECTION_BAD) {
                 puts("We were unable to connect to the database");
-                return -1;
         }
 
-	puts("Conncection successful.");
-	return 0;
+	return conn;
 }
 
 
-int baracus_query() {
+int baracus_query(PGconn *conn, char *query) {
 	int             rec_count;
 	int             row;
 	int             col;
 
 	PGresult *res;
-        res = PQexec(conn,
-                "SELECT * FROM pg_roles");
+        res = PQexec(conn, query);
 
         if (PQresultStatus(res) != PGRES_TUPLES_OK) {
                 puts("We did not get any data!");
