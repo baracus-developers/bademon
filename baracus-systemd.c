@@ -50,13 +50,20 @@ int main(int argc, char ** argv, char **env)
 	int             row;
 	int             col;
 
+	static char *dbname = "baracus";
+	static char *username = "dancer";
+	static char *password = "baractopus";
+	static char *hostaddr = "172.17.1.251";
+	static int port = 5162;
+	static int timeout = 10;
+
 	PGconn	 *conn;
 	PGresult *res;
 
 	appname = argv[0];
 	syslog_info("Appd %s running as %s\n", baracus_appname, appname);
 	
-	baracus_db_connect();
+	baracus_db_connect(hostaddr, dbname, username, password, port, timeout);
 	baracus_query();
 	
 	return 0;

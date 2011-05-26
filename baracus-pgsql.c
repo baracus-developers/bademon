@@ -11,13 +11,19 @@
 
 #include "baracus-pgsql.h"
 
-PGconn	 *conn;
-int baracus_db_connect() 
-{
-	PGresult *res;
+const int conninfo_strlen=255;
 
-//	conn = PQconnectdb("hostaddr = '127.0.0.1' port = '5162' dbname = 'baracus' user = 'dancer' password = 'baractopus' connect_timeout = '10'");
-	conn = PQconnectdb("hostaddr = '172.17.1.251' port = '5162' dbname = 'baracus' user = 'dancer' password = 'baractopus' connect_timeout = '10'");
+PGconn	 *conn;
+int baracus_db_connect(char *hostaddr, char *dbname, char *username, char *password, int port, int timeout) 
+{
+	
+	PGresult *res;
+	const char conninfo[conninfo_strlen];
+	
+	snprintf (conninfo, conninfo_strlen, "hostaddr = '%s' port = '%d' dbname = '%s' user = '%s' password = '%s' connect_timeout = '%d0'", hostaddr, port, dbname, username, password, timeout);
+	printf("Conninfo is %s\n", conninfo);
+//	const char *conninfo = "hostaddr = '127.0.0.1' port = '5162' dbname = 'baracus' user = 'dancer' password = 'baractopus' connect_timeout = '10'";
+	conn = PQconnectdb(conninfo);
  
         if (PQstatus(conn) == CONNECTION_BAD) {
                 puts("We were unable to connect to the database");
