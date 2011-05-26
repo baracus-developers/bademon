@@ -11,28 +11,31 @@
 
 #include "baracus-pgsql.h"
 
-const int conninfo_strlen=255;
-
 PGconn * baracus_db_connect(char *hostaddr, char *dbname, 
 			    char *username, char *password, 
 			    int port, int timeout) 
 {
 	
-	PGconn	 *conn;
 	PGresult *res;
-	const char conninfo[conninfo_strlen];
+	char * conninfo;
+	PGconn	 *conn = NULL;
+
+	conninfo = malloc(128+strlen(hostaddr)+strlen(dbname)+strlen(username)+strlen(password)+6+3);
+	if (conninfo == NULL) 
+		return NULL;
 	
-	snprintf (conninfo, conninfo_strlen, "hostaddr = '%s' port = '%d' dbname = '%s' user = '%s' password = '%s' connect_timeout = '%d0'", hostaddr, port, dbname, username, password, timeout);
+		snprintf (conninfo, conninfo_strlen, "hostaddr = '%s' port = '%6d' dbname = '%s' user = '%s' password = '%s' connect_timeout = '%3d'", hostaddr, port, dbname, username, password, timeout);
 	printf("conninfo is %s\n", conninfo);
 	
 	PQinitOpenSSL(1, 1);
 	conn = PQconnectdb(conninfo);
  
-        if (PQstatus(conn) == CONNECTION_BAD) {
+        if (PQstatus(conn) == CONNECTION_BAD) 
                 puts("We were unable to connect to the database");
-        }
 
+	free (conninfo);
 	return conn;
+	
 }
 
 
