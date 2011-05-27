@@ -16,7 +16,6 @@ PGconn * baracus_db_connect(char *hostaddr, char *dbname,
 			    char *username, char *password, 
 			    int port, int timeout) 
 {
-	PGresult *res;
 	char * conninfo;
 	PGconn	 *conn = NULL;
 	int conninfo_len = 128 + strlen(hostaddr) + strlen(dbname) + 
@@ -40,24 +39,24 @@ PGconn * baracus_db_connect(char *hostaddr, char *dbname,
 }
 
 
-int baracus_query(PGconn *conn, char *query) {
-	int     rec_count;
-	int	field_count;
+baracus_query_t* baracus_query(PGconn *conn, char *query) {
 	int     row;
 	int     col;
-	char **  data;
-	char *x;
-
 	PGresult *res;
+	baracus_query_t *bq;
 
 	if (conn == NULL) 
-		return -1;
+		return NULL;
 
-        res = PQexec(conn, query);
+ 	if ((bq = malloc(sizeof(baracus_query_t))) == NULL)
+		return NULL;
+	
+	bq->query = query;
+        res = PQexec(conn, bq->query);
 
         if (PQresultStatus(res) != PGRES_TUPLES_OK) {
                 puts("We did not get any data!");
-                return -1;
+                return NULL;
         }
 
 //	if (PQsetResultAttrs
@@ -67,44 +66,54 @@ int baracus_query(PGconn *conn, char *query) {
          */
 //        PQclear(res);
 	
-        puts("==========================");
-	/* first, print out the attribute names */
-	field_count = PQnfields(res);
-        rec_count = PQntuples(res);
-	data = (char **) calloc(field_count * (rec_count+1), sizeof(char *));
-	if (data == NULL) {
-		printf("error allocating data\n");
-		return -1;
-	}
-    	for (col = 0; col < field_count; col++) {
-		data[col] = PQfname(res, col);
-        	printf("%-16s", data[col]);
-	}
-    	printf("\n");
-    	for (col = 0; col < ((field_count < 5) ? field_count:5); col++)
-        	printf("===============");
-    	printf("\n");
+	bq->cols = PQnfields(res);
+        bq->rows = PQntuples(res);
+	if ((bq->header = calloc(bq->cols, sizeof(char *))) == NULL)
+		return NULL;
+	if ((bq->data = calloc(bq->cols * bq->rows, sizeof(char *))) == NULL)
+		return NULL;
+	
+    	for (col = 0; col < bq->cols; col++) 
+		bq->header[col] = PQfname(res, col);
 
-        rec_count = PQntuples(res);
-
-        for (row=0; row<rec_count; row++) {
-                for (col=0; col < field_count; col++) {
-			data[(row+1)*col+col] = PQgetvalue(res, row, col);
-                        printf("%-16s", data[(row+1)*col+col]);
-                }
-    		printf("\n");
-    		for (col = 0; col < ((field_count < 5) ? field_count:5); col++)
-        		printf("--------------");
-    		printf("\n");
-        }
-        printf("%d records.\n", rec_count);
-        puts("==========================");
+        for (row=0; row < bq->rows; row++) 
+                for (col=0; col < bq->cols; col++) 
+			bq->data[row*col+col] = PQgetvalue(res, row, col);
 
         PQclear(res);
 
         PQfinish(conn);
 	
-	return 0;
+	return bq;
 }
 
+
+void print_table (baracus_query_t *bq) {
+	int     row;
+	int     col;
+
+        puts("==========================");
+	
+	/* first, print out the attribute names */
+    	for (col = 0; col < bq->cols; col++) {
+        	printf("%-16s", bq->header[col]);
+	}
+    	printf("\n");
+    	for (col = 0; col < ((bq->cols < 5) ? bq->cols:5); col++)
+        	printf("===============");
+    	printf("\n");
+
+	/* print the data */
+        for (row=0; row < bq->rows; row++) {
+                for (col=0; col < bq->cols; col++) {
+                        printf("%-16s", bq->data[row*col+col]);
+                }
+    		printf("\n");
+    		for (col = 0; col < ((bq->cols < 5) ? bq->cols:5); col++)
+        		printf("--------------");
+    		printf("\n");
+        }
+        printf("%d records.\n", bq->rows);
+        puts("==========================");
+}
 
