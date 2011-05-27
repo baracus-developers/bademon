@@ -8,6 +8,7 @@ typedef struct {
 	char *query;
 } baracus_query_t;
 
+PGconn * baracus_connect();
 PGconn * baracus_db_connect(char *hostaddr, char *dbname, char *username, 
 			    char *password, int port, int timeout);
 

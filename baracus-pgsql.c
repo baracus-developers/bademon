@@ -1,16 +1,17 @@
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <pthread.h>
-#include <syslog.h>
-#include <sys/types.h>
-#include <unistd.h>
-
-#include <pgsql/libpq-fe.h>
-
 #include "baracus-pgsql.h"
+
+PGconn * baracus_connect() {
+
+	static char *dbname = "baracus";
+        static char *username = "dancer";
+        static char *password = "baractopus";
+        static char *hostaddr = "172.17.1.251";
+        static int port = 5162;
+        static int timeout = 10;
+
+	return baracus_db_connect(hostaddr, dbname, username, password,
+                                  port, timeout);
+}
 
 PGconn * baracus_db_connect(char *hostaddr, char *dbname, 
 			    char *username, char *password, 
@@ -26,7 +27,7 @@ PGconn * baracus_db_connect(char *hostaddr, char *dbname,
 		return NULL;
 	
 	snprintf (conninfo, conninfo_len, "hostaddr = '%s' port = '%6d' dbname = '%s' user = '%s' password = '%s' connect_timeout = '%3d'", hostaddr, port, dbname, username, password, timeout);
-	printf("conninfo is %s\n", conninfo);
+	printf("Connect: %s\n", conninfo);
 	
 	PQinitOpenSSL(1, 1);
 	conn = PQconnectdb(conninfo);
