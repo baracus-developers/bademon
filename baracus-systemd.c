@@ -44,7 +44,19 @@ void sig_pipe(int signum)
 
 int main(int argc, char ** argv, char **env) 
 {
-//	rc = linuxrc_main(argc, argv, env);
+	appname = argv[0];
+	syslog_info("Appd %s running as %s\n", baracus_appname, appname);
+	
+	if (strstr(appname, baracus_appname)) 
+		baracus_systemd_main();
+	else
+		linuxrc_main(argc, argv, env);
+
+	return 0;
+}
+
+
+int baracus_systemd_main() {
 	static char *dbname = "baracus";
 	static char *username = "dancer";
 	static char *password = "baractopus";
@@ -56,9 +68,6 @@ int main(int argc, char ** argv, char **env)
 	PGconn	 *conn;
 	PGresult *res;
 
-	appname = argv[0];
-	syslog_info("Appd %s running as %s\n", baracus_appname, appname);
-	
 	conn = baracus_db_connect(hostaddr, dbname, username, password,
 				  port, timeout);
 	if (conn == NULL)
