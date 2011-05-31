@@ -13,6 +13,9 @@
 #include "baracus-pgsql.h"
 #include "baracus-ssl.h"
 
+const char * baracus_appname = "baracus-systemd";
+const char * baracus_systemd_cfg = "/etc/baracus/systemd.config";
+
 const char * default_cfg_file = "/etc/sysconfig/baracus-systemd";
 char * config_file;
 
