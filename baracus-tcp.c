@@ -87,6 +87,7 @@ int tcp_srv() {
 	struct timeval tv;
 	struct sockaddr addr;
 	SSL_CTX *ssl_ctx;
+	SSL *ssl;
 
 	int len = sizeof(addr);
 
@@ -114,7 +115,8 @@ server_run:
 	}
 	printf("accepted\n");
 
-	ssl_accept(ss, ssl_ctx);
+	ssl = ssl_accept(as, ssl_ctx);
+	http_serve(as, ssl);
 
 	if (tcp_srv_stop(ss)) {
 		syslog_info("socket shutdown");

@@ -74,25 +74,89 @@ static int password_cb(char *buf,int num,
         return(strlen(pass));
 }
 
-int ssl_accept(int s, SSL_CTX *ctx) {
+int http_serve(int s, SSL* ssl) {
+#define BUFSIZZ 1024
+	char buf[BUFSIZZ];
+	int r,len;
+	BIO *io, *ssl_bio;
+
+	io = BIO_new(BIO_f_buffer());
+	ssl_bio = BIO_new(BIO_f_ssl());
+    	BIO_set_ssl(ssl_bio,ssl,BIO_CLOSE);
+    	BIO_push(io,ssl_bio);
+
+    	while(1) {
+		r=BIO_gets(io,buf,BUFSIZZ-1);
+
+      		switch(SSL_get_error(ssl, r)) {
+        		case SSL_ERROR_NONE:
+          			len=r;
+          			break;
+	        	default:
+        			syslog_info("SSL read problem");
+      		}
+
+		/* Look for the blank line that signals
+        	 the end of the HTTP headers */
+      		if(!strcmp(buf,"\r\n") ||
+        		!strcmp(buf,"\n"))
+        		break;
+    	}
+
+	if((r=BIO_puts(io,"HTTP/1.0 200 OK\r\n"))<=0)
+		syslog_info("Write error");
+	if ((r = BIO_puts(io,"Server: EKRServer\r\n\r\n")) <= 0)
+		syslog_info("Write error");
+	if((r=BIO_puts(io,"Server test page\r\n")) <= 0)
+		syslog_info("Write error");
+
+	if((r = BIO_flush(io)) < 0)
+		syslog_info("Error flushing BIO");
+
+	printf("shutdown\n");
+	r = SSL_shutdown(ssl);
+	if (!r) {
+		/* If we called SSL_shutdown() first then
+		   we always get return value of '0'. In
+		   this case, try again, but first send a
+		   TCP FIN to trigger the other side's
+		   close_notify*/
+	      shutdown(s, 1);
+	      r = SSL_shutdown(ssl);
+    	}
+
+	switch (r) {
+		case 1:
+			break; /* Success */
+		case 0:
+		case -1:
+		default:
+			syslog_info("Shutdown failed");
+	}
+	
+	SSL_free(ssl);
+	close(s);
+
+	return(0);
+}
+
+
+SSL *ssl_accept(int s, SSL_CTX *ctx) {
 	SSL *ssl;
 	BIO *sbio;
 	sbio = BIO_new_socket(s, BIO_NOCLOSE);
 
         ssl = SSL_new(ctx);
-#if 0
-        SSL_set_bio(ssl, sbio, sbio);
 
+        SSL_set_bio(ssl, sbio, sbio);
         if ((SSL_accept(ssl) <= 0)) {
                 syslog_info("SSL accept ");
                 //close (s);
-                goto server_run;
+		return NULL;
         }
-
+	printf("ssl accepted\n");
         //destroy_ctx(ctx);
-#endif
-
-
+	return ssl;
 }
 
 
@@ -116,12 +180,6 @@ int ssl_connect() {
 	SSL_set_accept_state(SSL);
 	return 0;
 
-
-}
-
-int SSL_shutdown(SSL * SSL) {
-	SSL_free(SSL);
-	return 0;
 
 }
 
