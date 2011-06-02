@@ -12,6 +12,9 @@
 #include "baracus-systemd.h"
 #include "baracus-pgsql.h"
 #include "baracus-ssl.h"
+#include "baracus-tcp.h"
+
+# define SYSLOG_MAX_LEN 1024
 
 const char * baracus_appname = "baracus-systemd";
 const char * baracus_systemd_cfg = "/etc/baracus/systemd.config";
@@ -20,6 +23,8 @@ const char * default_cfg_file = "/etc/sysconfig/baracus-systemd";
 char * config_file;
 
 int debug;         /* global debug flag - no forking to b/g if set*/
+int systemd_run = 0;
+
 static int config_ignore;
 static int nofork;   
 
@@ -27,7 +32,6 @@ extern int linuxrc_main(int argc, char **argv, char **env);
 
 pthread_t baracusd_nfsio, baracusd_socket, baracusd_mount;
 char *appname = NULL;
-
 
 void syslog_info(const char *fmt, ...) {
 	int pid;
@@ -48,22 +52,28 @@ void syslog_info(const char *fmt, ...) {
 	printf("syslog: [%d] %s\n",pid, msg);
 }
 
+void syslog_exit(const char *fmt, ...) {
+	syslog_info(fmt);
+	exit (-1);
+}
 /* broken pipes */
 void sig_pipe(int signum)
 {
-  syslog_info("broken pipe");
+	syslog_info("broken pipe");
 }
 
 /* exit */
 void sig_baracus_exit(int signum)
 {
-  syslog_info("Baracus exit signal");
+	syslog_info("exit signal");
+	systemd_run = 1;
+
 }
 
 /* reconfig */
 void sig_baracus_config(int signum)
 {
-  syslog_info("Baracus config signal");
+	syslog_info("config signal");
 }
 
 int sig_setup(void)
@@ -106,62 +116,9 @@ int main(int argc, char ** argv, char **env)
 	return 0;
 }
 
-
-int baracus_systemd_main(int argc, char ** argv, char **env) {
-	int s;
-	pid_t pid;
-
-	char runlevel = '0';
-
-	debug = 0; /* use '-d' to enable debug output */
-	nofork = 0; /* no fork. */
-
-	/* get the current runlevel */
-	//runlevel = get_system_runlevel();
-
-	config_ignore = 0;
-	config_file = (char *) default_cfg_file;
-
-	baracus_systemd_init();
-
-	/* suppress fork on debug or nofork */
-	if (!(debug || nofork)) {
-		pid = fork();
-		if (pid) {
-         		if (pid == -1) {
-               			syslog_info("fork\n");
-                		exit (-1);
-                	}
-           		else {
-                   		syslog_info("parent exit\n");
-                   		exit (-1);
-              		}
-        	}
-	}
-
-	pid =  getpid();
-	syslog_info("%s pid %d\n", appname, pid);
-
-	if (sig_setup()) {
-        	syslog_info(LOG_ERR, "Failed installing sig handler(s)");
-		return -1;
-    	}
-
-	return 0;
-}
-
-int baracus_systemd_init() {
-
-	PGconn	 *conn;
-
-	baracus_ssl_init();
+int baracus_query_roles(PGconn   *conn) {
 
 	baracus_query_t *bq;
-	if ((conn = baracus_connect()) == NULL) {
-		syslog_info("baracus_connect fails.");
-		return -1;
-	}
-
 
 	if ((bq = baracus_query(conn, "SELECT * FROM pg_roles")) == NULL) {
 		syslog_info("select fails.");
@@ -169,6 +126,55 @@ int baracus_systemd_init() {
 	}
 	
 	print_table(bq);
+	return 0;
+}
+
+int baracus_systemd_main(int argc, char ** argv, char **env) {
+	pid_t pid;
+	PGconn	 *conn;
+
+	char runlevel = '0';
+
+	debug = 0; /* use '-d' to enable debug output */
+	nofork = 1; /* no fork. */
+
+	/* get the current runlevel */
+	//runlevel = get_system_runlevel();
+
+	config_ignore = 0;
+	config_file = (char *) default_cfg_file;
+
+	/* no backgrounding on debug or nofork */
+	if (!(debug || nofork)) {
+		pid = fork();
+		if (pid) {
+         		if (pid < 0) {
+               			syslog_info("fork\n");
+                		return -1;
+                	}
+           		else {
+                   		syslog_info("parent exit\n");
+                   		return 0;
+              		}
+        	}
+	}
+
+	pid =  getpid();
+	syslog_info("%s child", appname);
+
+	if (sig_setup()) {
+        	syslog_info("Failed installing sig handler(s)");
+		return -1;
+    	}
+
+	systemd_run = 1;
+
+	if ((conn = baracus_connect()) == NULL) {
+		syslog_info("baracus_connect fails.");
+		return -1;
+	}
+
+	tcp_srv();
 
 	return 0;
 }

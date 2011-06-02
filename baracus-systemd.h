@@ -5,8 +5,7 @@
 #ifndef _BARACUS_SYSTEMD_H
 #define _BARACUS_SYSTEMD_H
 
-# define SYSLOG_MAX_LEN	1024
-
+extern int systemd_run;
 void syslog_info(const char *fmt, ...);
-
+int baracus_systemd_main(int argc, char ** argv, char **env);
 #endif

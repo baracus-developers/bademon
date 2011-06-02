@@ -1,3 +1,8 @@
+#include <openssl/ssl.h>
 
-int baracus_ssl_init();
+#define KEYFILE "server.pem"
+#define PASSWORD "password"
+#define DHFILE "dh1024.pem"
+#define CA_LIST "root.pem"
 
+SSL_CTX *ssl_init_ctx(char *, char*);
